@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xbox Cafe Manager</title>
+    <link rel="shortcut icon" href="./images/xbox-games-logo-symbol-19.png">
+    <link rel="stylesheet" href="./CSS/styles.css">
+    <link rel="stylesheet" href="./CSS/control-panel-styles.css">
+    <link rel="stylesheet" href="./CSS/tv-container-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;400;500&display=swap" rel="stylesheet">
+    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="header-wrapper">
+        <img src="./images/xbox-games-logo-symbol-19.png" alt="ICONO" class="header__icon">
+        <h1 class="header__title not-selectable">GAME OVER</h1>
+    </div>
+
+    <div class="navigation-bar">
+        <div class="nav__button nav__button--activate-tv">Activar Equipo</div>
+        <div class="nav__button nav__button--">Recargar Usuario</div>
+        <div class="nav__button nav__button--">Revisar Usuario</div>
+        <div class="nav__button nav__button--">CERRAR SESION</div>
+        <div class="nav__button nav__button--"></div>
+
+        
+    </div>
+    <div class="main">
+
+        <div class="tvs-container" id="tvs-container"></div>
+        <div class="server-responses" id="server-responses"></div>
+        <div class="add-tv">
+            <form action="" class="form-activate-tv" autocomplete="off">
+
+                <h2 class="activate-tv__title">ACTIVAR EQUIPO</h2>
+
+                <div class="activate-tv__tvOptions">
+                    
+                    <div class="activate-tv__number">
+                        <h3 class="activate-tv__subtitle" >MAQUINA Nº</h3>
+                        <select required="true" name="tv__number" class="activate-tv__select" id="form-tvNumber">
+                            <option value="">0</option>
+                            <option disabled value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+        
+                    </div>
+        
+                    <div class="activate-tv__tiempo">
+        
+                        <h3 class="activate-tv__subtitle">TIEMPO</h3>
+                        
+                        <select class="activate-tv__select activate-tv__select--hours" name="hours_form" id="form-hours">
+                                <option value="0">00</option>
+                                <option value="1">1h</option>
+                                <option value="2">2h</option>
+                                <option value="3">3h</option>
+                                <option value="4">4h</option>
+                                <option value="5">5h</option>
+                                <option value="6">6h</option>
+                                <option value="7">7h</option>
+                                <option value="8">8h</option>
+                                <option value="Tiempo libre" style="font-size: 20px">Libre</option>
+                        </select>
+                        
+                        <select class="activate-tv__select activate-tv__select--minutes" name="minutes_form" id="form-minutes" >
+                                <option value="00">00</option>
+                                <option value="30">30m</option>
+                        </select>
+                        
+                    </div>
+                </div>
+
+                <div class="activate-tv__is-user">
+                    <div class="is-user__selector is-user__selector--si" onclick="invertButton('isUser')" id="selector-si">REGISTRADO</div>
+                    <div class="is-user__selector is-user__selector--no" onclick="invertButton('isNotUser')" id="selector-no">NO REGISTRADO</div>
+                </div>
+    
+                
+                <input class="activate-tv__user" required type="text" name="user" placeholder="Usuario" id="form-user" >
+    
+                
+                <input class="activate-tv__pass" required type="password" name="pass" placeholder="Clave" id="form-pass" >
+                
+                <button class="activate-tv__button"  id="button-activate" value="ACTIVAR" >ACTIVAR</button>
+
+
+            </form>
+            
+        
+        </div>
+    </div>
+
+
+
+    <script src="./javaScript/getTvs.js"></script>
+    <script src="./javaScript/script.js"></script>
+    <script src="./javaScript/sendForm.js"></script>
+</body>
+</html>
