@@ -8,6 +8,8 @@ import {dataBaseHelper} from "./../helpers/dataBase.helper";
 
 import { parse } from "dotenv";
 
+var cmd =require('node-cmd');
+
 
 
 const activateTv = async (req, res)=>{
@@ -24,7 +26,7 @@ const activateTv = async (req, res)=>{
         
         //verifica user y pas si no responde con un error 
         const user_form_prosseced = await dataBaseHelper.consultUserPass(user_form, pass_form);
-
+        console.log(user_form_prosseced)
         //consultar si el tiempo que se esta pidiendo se menor o igual al saldo en minutos disponible
         await dataBaseHelper.consultUserLeftMinutes(leftMinutes, user_form_prosseced);
         
@@ -36,6 +38,10 @@ const activateTv = async (req, res)=>{
     
         //Actualizar la base de datos
         await dataBaseHelper.updateTv(tvNumber_form, leftMinutes, user_form_prosseced);
+
+
+
+        
         res.send("Equipo activado con exito");
     } catch (error) {
         res.send(error);
