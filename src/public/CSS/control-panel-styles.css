@@ -6,8 +6,8 @@ body{
     --selector-bg-color: rgb(6, 183, 106);
     --selector-font-color: rgba(0, 30, 0);
     --button-border-color:gray;
-    --selector-active-color: rgb(69, 155, 59) ;
-    --selector-inactive-color: rgb(118, 118, 118);
+    --selector-active-color: rgb(2, 20, 77, 1) ;
+    --selector-inactive-color: rgb(56, 56, 56);
 
     /* tvs container */
 
@@ -20,8 +20,12 @@ body{
     max-height: 100vh;
     overflow: hidden;
 
+    background-image: url(./../images/27489.png);
+    background-repeat: no-repeat;
+    
+
 }
-.form-activate-tv{
+form{
     background-color: var(--form-background-color)  ;
     color: var(--form-text-color);
     display: grid;
@@ -30,13 +34,15 @@ body{
     width:500px;
     height: 80vh;
     padding: 30px 10px;
+
 }
 
-.activate-tv__title{
+.title{
+    letter-spacing: 5px;
     font-size: 5em;
     grid-column: 1 / -1;
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Rubik Glitch', cursive;
 }
 
 
@@ -48,7 +54,8 @@ body{
     align-items: center;
     justify-content: center;
     gap: 1px;
-    margin-top:20px
+    margin-top:20px;
+    color:white;
 }
 
 .is-user__selector {
@@ -66,11 +73,12 @@ body{
 }
 
 .is-user__selector--si{
+    color:white;
     cursor: pointer;
     background-color: var(--selector-active-color);
 }
 
-.activate-tv__select{
+.select{
     /* desactivar la flecha */
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -91,11 +99,13 @@ body{
     flex-flow: row wrap;
     justify-content: center;
     gap: 10px;
+    
    
 }
 
-.activate-tv__subtitle{
+.subtitle{
     font-size: 2em;
+    font-family: 'Rubik Glitch', cursive;
 }
 
 .activate-tv__number, .activate-tv__tiempo{
@@ -116,7 +126,7 @@ body{
 }
 
 .activate-tv__button{
-    
+    font-family: 'Rubik Glitch', cursive;
     margin:10px 100px;
     font-size: 3em;
     border-radius: 6px;
@@ -132,77 +142,116 @@ body{
 /* MOSTRAR RESPUESTAS DEL SERVIDOR */
 
 .server-responses{
-    background-color: red;
+
     font-size: 3em;
 }
 
 .server-responses-title{
-    color:yellow
+    color:black
 }
 
 .mostrar-datos{
     border:5px solid pink
 }
-/*  */
-
 
 .main{
-    border:10px solid blueviolet;
+
     display:grid;
     grid-template-columns: auto minmax(600px, 700px);
     grid-template-rows: minmax(300px, 400px) 30px ;
-}
 
-.tv--active, .tv--inactive{
-    background-color: var(--tv-inactive-bg-color);
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.tvs-container{
-    border:3px solid orange;
-
-    grid-row: 1 / -1;
-    grid-column: 2 / 3;
-
-}
-.tv__leftTime{
-    width:150px
-    
-}
-
-.left-time__texto{
-    font-family: 'Montserrat', sans-serif;
-    font-size: 30px;
-    max-height: 30px;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    min-width: 100px;
-    background-color: aquamarine;
-    text-align: center;
-
-}
-.tv__number{
-    background-color: yellow;
-    width:30px;
-    text-align: center;
 }
 
 .add-tv{
-    
     grid-row: 1 / 2;
     grid-column: 1 / 2;
-    border:3px solid black;
     display:flex;
     justify-content: center;
-    
+    position: absolute;
+    top: 0;
+    z-index: 99;
 }
 
-.tv__closeactive{
-    max-width: 30px;
-    background-color: blue;
-    width:30px;
-    height: 30px;
+
+
+.select{
+    display:flex;
+    flex-flow:row wrap;
+    justify-content: center;
+    align-items: center;
+    gap:4px;
+}
+
+.user-input{
+    display:flex;
+    flex-flow:row wrap;
+    justify-content: center;
+    align-items: center;
+    gap:4px;
+
+    margin: 0 100px;
+    font-size: 3em;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    border-radius:6px;
+    border-color: #aaa;
+}
+
+.user-button{
+    margin:10px 100px;
+    font-size: 3em;
+    border-radius: 6px;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-top: 25px;
+    font-family: 'Rubik Glitch', cursive;
+}
+
+.client-check__form, .client-registration__form, .client-update__form{
+    background-color: var(--form-background-color)  ;
+    color: var(--form-text-color);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(8, 1fr);
+    width:500px;
+    height: 80vh;
+    padding: 30px 10px;
+}
+
+.control-panel{
+    display: flex;
+    justify-content: center;
+    position:relative;
+}
+
+.client-check{
+    position:absolute;
+    top:0;
+    z-index: 1;
+    display:none
+
+} 
+.client-registration{
+    position:absolute;
+    top:0;
+    z-index: 2;
+    display:none
+} 
+
+.client-update{
+    position:absolute;
+    top:0;
+    z-index:3;
+    display:none
+}
+
+.client-update__tiempo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 

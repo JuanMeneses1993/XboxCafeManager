@@ -2,22 +2,24 @@ import { json } from "body-parser";
 import { response } from "express";
 import { Connection } from "promise-mysql";
 import { getConnection } from "../database/database";
-
 import {timeHelper} from "./../helpers/time.helper";
 import {dataBaseHelper} from "./../helpers/dataBase.helper";
-
 import { parse } from "dotenv";
-
-var cmd =require('node-cmd');
-
+import { tvHelper } from "../helpers/tv.helper";
 
 
 const activateTv = async (req, res)=>{
 
+
     try {
         //extraer datos
-        let {tvNumber_form, tvHours_form, tvMinutes_form, user_form, pass_form } = req.body;
-        
+        let {tvNumber, tvHours, tvMinutes, tvUser, tvPass } = req.body;
+        let tvNumber_form =  tvNumber;
+        let tvHours_form = tvHours;
+        let tvMinutes_form = tvMinutes;
+        let user_form = tvUser;
+        let pass_form = tvPass;
+  
         //convertir a minutos
         const leftMinutes = (Number(tvHours_form)*60) + Number(tvMinutes_form);
     
@@ -26,7 +28,7 @@ const activateTv = async (req, res)=>{
         
         //verifica user y pas si no responde con un error 
         const user_form_prosseced = await dataBaseHelper.consultUserPass(user_form, pass_form);
-        console.log(user_form_prosseced)
+        
         //consultar si el tiempo que se esta pidiendo se menor o igual al saldo en minutos disponible
         await dataBaseHelper.consultUserLeftMinutes(leftMinutes, user_form_prosseced);
         
@@ -35,23 +37,27 @@ const activateTv = async (req, res)=>{
         
         //SUMAR TIEMPO AL EMPLEADO PENDIENTE
    
-    
         //Actualizar la base de datos
         await dataBaseHelper.updateTv(tvNumber_form, leftMinutes, user_form_prosseced);
-
-
-
-        
+        //Activar el televisor
+        tvHelper.activateTv(tvNumber_form)
         res.send("Equipo activado con exito");
     } catch (error) {
+        console.log(error)
         res.send(error);
     };
 
 };
 
 const deactivateTv = async (req, res)=>{
-
-    res.send(`Hola desde deactivate Parametro: ${req.params['id']}`);
+    try {
+        tvHelper.deactivateTv(req.params['tvNumber'])
+        dataBaseHelper.deactivateTv(req.params['tvNumber'])
+        res.sendStatus(200)
+        
+    } catch (error) {
+        res.send(500)
+    }
     //GET
     //validar datos
         //-revisar si la tv esta encendida o devolver error

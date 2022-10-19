@@ -40,4 +40,20 @@ const invertButton = (button)=>{
     }
 } 
 
+let closeTv = async (tvNumber)=>{
+    //confirmar solicitud
+    let userInput = prompt("Escriba yes para aceptar")
+    let lowerUserInput = userInput.toLowerCase()
 
+    if (lowerUserInput !== 'yes'){
+        return
+    }
+
+    //hacer un fetch
+    try {
+        let serverResponse = await fetch(`/tv/${tvNumber}`, {method:'DELETE'})
+        console.log( await serverResponse.text()) 
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -1,5 +1,5 @@
 # XBOX CAFE MANAGER
-
+aaaaaaaaaa
 Administra una sala de videojuegos Xbox, mediante la administracion del encendido y apagado de los SmartTV.
 
 <hr/>

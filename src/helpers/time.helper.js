@@ -35,11 +35,16 @@ function getTimeLeft(endTime){
     //y calcula el tiempo que falta para esa hora desde la hora actual
     //devuelve un contador en el formato HH:mm:ss
 
+    //si el valor que se le pasa es completado devuelve 00:00:00
+    if (endTime === 'completado'){
+        return '00:00:00'
+    }
+
     //revisar si la fecha final es mayor que la actual
     const endTimeParsed = parseDate(endTime)
     if (isAfter(getCurrentDate(), endTimeParsed)){
         //revisar y actualizar todos los end time
-        dataBaseHelper.updateTimeEnd()
+        //dataBaseHelper.updateTimeEnd()
         //y devolver 00:00:00
         return '00:00:00'
     }
