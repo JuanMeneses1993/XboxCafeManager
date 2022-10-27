@@ -6,14 +6,14 @@ import {timeHelper} from "./../helpers/time.helper";
 import {dataBaseHelper} from "./../helpers/dataBase.helper";
 import { parse } from "dotenv";
 import { tvHelper } from "../helpers/tv.helper";
-import { clientHelper } from "../helpers/client.dataBase.helper";
+import { clientDbHelper } from "../helpers/client.dataBase.helper";
 
 
 const getUserMinutes = async (req, res)=>{
     try {
         const user_form = req.params['userName']
         console.log(user_form)
-        const leftMinutes = await clientHelper.getClientLeftMinutes(user_form);
+        const leftMinutes = await clientDbHelper.getClientLeftMinutes(user_form);
         
         res.send(String(leftMinutes))
         
@@ -25,22 +25,21 @@ const getUserMinutes = async (req, res)=>{
 const addMinutesToUser = async (req, res)=>{
     try {
         //extraer los datos
-        const {user_form, hours_form, minutes_form} = req.body;
-        console.log(user_form, hours_form, minutes_form)
+        const {clientUpdateUser, clientUpdateHours} = req.body;
 
         //validar datos
         //verificar si los minutos no son mayores a de 30 y si las horas no son mayores de 8 ni menores a 0
-        if (Number(hours_form) < 0 ||
-            Number(hours_form) > 8 ||
-            Number(minutes_form) > 30 ){
+        if (Number(clientUpdateHours) < 0 ||
+            Number(clientUpdateHours) > 8 ){
                 throw new Error ('Parametros de tiempo invalidos')
             }
         //actualizar los minutos en la base de datos
-        await clientHelper.addMinutesToClient(user_form, hours_form, minutes_form)
+        await clientDbHelper.addMinutesToClient(clientUpdateUser, clientUpdateHours, '0')
         
 
-        res.status(200).send('tiempo agregados satisfactoriamente')
+        res.status(200).send('Tiempo agregado satisfactoriamente')
     } catch (error) {
+        console.error(error)
         res.send(String(error))
     }
 };
@@ -48,18 +47,18 @@ const addMinutesToUser = async (req, res)=>{
 const createNewUser = async (req, res)=>{
     try {
         //extraer los datos
-        const {user_form, pass_form, pass_repeat_form} = req.body
+        const {clientRegistrationUser, clientRegistrationPass, clientRegistrationPassRepeat} = req.body
 
         //verificar si las contrasenas son iguales
-        if (pass_form !== pass_repeat_form){
+        if (clientRegistrationPass !== clientRegistrationPassRepeat){
             throw new Error ('Las claves no coinciden')
         }
 
         //revisar si el nombre de usuario ya esta en uso
-        await clientHelper.isUserExist(user_form)
+        await clientDbHelper.isUserExist(clientRegistrationUser)
         
         //agregar el cliente a la base de datos
-        await clientHelper.createNewClient(user_form, pass_form)
+        await clientDbHelper.createNewClient(clientRegistrationUser, clientRegistrationPass)
         
         res.status(200).send('Usuario creado satisfactoriamente')
     } catch (error) {

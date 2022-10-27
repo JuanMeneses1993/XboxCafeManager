@@ -48,7 +48,7 @@ const addMinutesToClient = async (userName, hours, minutes)=>{
     try {
         //obtener los minutos actuales de ese usuario
         const dataBaseLeftMinutes = await clientDbHelper.getClientLeftMinutes(userName)
-        
+
         //convertir a minutos
         const totalMinutes = (Number(hours) * 60) + Number(minutes)
         
@@ -60,7 +60,7 @@ const addMinutesToClient = async (userName, hours, minutes)=>{
         const result = await connection.query(`UPDATE clientes SET leftMinutes = ${leftMinutesUpdated} WHERE user = ?`,userName);
         
     } catch (error) {
-        throw new Error (error)
+        throw new Error ('Usuario no valido')
     }
 }
 
