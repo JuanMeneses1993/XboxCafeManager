@@ -1,10 +1,9 @@
-// import { Router } from "express";
-// import { tvController } from "./../controllers/tv.controller";
+import { Router } from "express";
+import { clientController } from "../controllers/client.controller";
+const router = Router();
 
-// const router = Router();
+router.post("/", clientController.createNewUser);//crear nuevo cliente
+router.get("/:userName", clientController.getUserMinutes);// obtener informacion tiempo disponible
+router.put("/", clientController.addMinutesToUser);//recargar saldo al cliente
 
-// router.post("/", tvController.activateTv);//actualizar datos del cliente
-// router.get("/", tvController.tvInfo);// obtener informacion tiempo disponible
-// router.delete("/:tvNumber", tvController.deactivateTv);
-
-// export default router;
+export default router;

@@ -1,81 +1,86 @@
-body{
-    --nav-bg-color:rgb(169, 169, 169);
-    --nav-button-bg-color:transparent;
-    --nav-button-text-color:black;
-    --hover-nav-button-text-color:rgb(191, 191, 191);
-    --hover-nav-button-bg-color:rgb(107, 107, 107);
-    --nav-button-border-color:white;
-}
 
 .navigation-bar{
+    grid-row: 2/3;
+    grid-column: 1/-1;
     height:40px;
-    background-color: var(--nav-bg-color);
+    background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.8));
     display:flex;
     flex-flow: row wrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    align-items: center;
     gap: 10px;
     
 }
 
 .nav__button{
     font-size: 3em;
-    background-color: var(--nav-button-bg-color);
-    color:var(--nav-button-text-color);
+    font-weight: lighter;
+    color: rgba(255, 255, 255, 0.885);
     /* border: 1px solid var(--nav-button-border-color); */
-    border-radius: 6px;
+    border-radius: 10px;
     padding: 5px;
+    text-shadow: 0px 0px 2px rgba(0, 17, 255, 0.89);
+    box-shadow: --box-shadow;
 }
 
 .nav__button:hover{
-    color:var(--hover-nav-button-text-color);
-    background-color: var(--hover-nav-button-bg-color) ;
-}
-
-.main{
-    display:grid;
-    grid-template-columns: auto minmax(300px, 300px);
+    opacity: 80%;
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: var(--box-shadow)
 }
 
 .tv__content{
     display: flex;
-    justify-content: space-evenly;
-    align-items: center; 
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    justify-content: space-between;
 }
 
 .tv__number{
+    font-weight: lighter;
+    font-size: 1.5em;
     margin-left:20px;
+    margin-right:40px;
     width:30px;
-    background-color: gray;
     text-align: center;
-    border-radius: 6px;
+    color:#7C8C92;
+    text-shadow: 1px 1px 15px  #43517B;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
 }
 
 .tv__leftTime{
     font-size: 1.3em;
     text-align: center;
-    width:150px;
     border-radius: 10px;
+    font-weight: lighter;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 20px;
 }
 
 .tv{
-    border:1px solid black;
-    display:grid;
-    grid-template-columns: repeat(2, 1fr);
     font-size: 3.5em;
+    font-weight: lighter;
     border-radius: 5px;
-    margin: 1px;
+    background-color: #161b2c39;
+    display: flex;
+    justify-content:space-between;
 }
 
 .tv:hover{
-    background-color: rgb(211, 211, 211);
+    transform:scale(120%) translateX(-2vw);
+    cursor: pointer;
+    border:2px solid rgba(0, 0, 255, 0.493)
 }
 
 .tv__close-icon{
+    box-sizing: border-box;
     width: 30px;
-    margin:auto;
+    height: 30px;
+    margin: auto 0;
+    margin-right: 10px;
 }
 
 .tv__close-icon:hover{
@@ -83,34 +88,56 @@ body{
 }
 
 .tv__close-icon--inactive{
-    visibility: hidden;
+    display:none;
 }
 
 .tv__close-icon--active{
-    visibility: visible;
+    display:inline;
 }
 
-.tv__active{
-    background-color: rgba(0, 255, 0, 0.2);
-    border-radius: 6px;
+.tv--inactive{
+    background-color: rgba(0, 0, 0, 0.27);
+    color:rgba(255, 255, 255, 0.17);
+    text-shadow: 1px 1px 10px #8D7F7D;
 }
-.tv__inactive{
-    background-color: rgba(255, 0, 0, 0.2);
-    color:rgb(195, 194, 194);
-    border-radius: 6px;
+
+.tv--active{
+    background-color: rgba(172, 255, 47, 0.05);
+    color:#8D7F7D;
+    box-shadow:var(--box-shadow);
+    border: 2px solid var(--borders);
+    
+}
+
+.tv__leftTime--completado{
+    border:none;
+    color:transparent;
+    animation-name: intermintent;
+    animation-duration: 0.33s;
+    animation-iteration-count: infinite;
+    text-shadow: none;
+    color:transparent;
+    box-shadow:-1px -1px 5px #ff00005e ;
+}
+
+@keyframes intermintent {
+
+    50%, 100% {
+        color:red;
+    }
 
 }
 
 .tvs-container{
-
-    padding: 5px 10px;
-    grid-row: 1 / -1;
-    grid-column: 2 / 3;
+    grid-column: 2/3;
+    grid-row: 3/4;
     display:grid;
     grid-template-rows: repeat(10, 1fr);
     grid-template-columns: 1fr;
     border-left: 3px solid black;
-    margin:5px;
-}
+    margin-bottom: 36px;
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
 
+}
 

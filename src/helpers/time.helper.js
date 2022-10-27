@@ -1,8 +1,7 @@
 
-import {isAfter,differenceInSeconds, formatISO9075, formatDistanceToNowStrict, parse, addHours, secondsToHours, secondsToMinutes, minutesToSeconds, hoursToSeconds, setDate, addMinutes, addSeconds, startOfDay, subHours, minutesToHours, hoursToMinutes} from 'date-fns'
-import{format, getTimezoneOffset, toDate, utcToZonedTime} from 'date-fns-tz'
-import e from 'express'
-import { dataBaseHelper } from './dataBase.helper'
+import {isAfter,differenceInSeconds, addMinutes} from 'date-fns'
+import{format, toDate, utcToZonedTime} from 'date-fns-tz'
+
 
 
 function getCurrentDate(){
@@ -16,6 +15,7 @@ function getCurrentDate(){
     return currentDateParsed
     
 }
+
 function parseDate(date){
     //Devuelve un objeto Date con la fecha que le pasemos 
     //en el formato 'yyyy-MM-dd HH:mm:ssxxx'
@@ -23,6 +23,7 @@ function parseDate(date){
     
     return parsed
 }
+
 function formatDate(date){
     const parsedDate = toDate(new Date(date))
     const azoresDate = utcToZonedTime(parsedDate, 'Atlantic/Azores')
@@ -30,6 +31,7 @@ function formatDate(date){
     
     return formated
 }
+
 function getTimeLeft(endTime){
     //recibe una fecha como parametro 
     //y calcula el tiempo que falta para esa hora desde la hora actual
@@ -56,6 +58,7 @@ function getTimeLeft(endTime){
     return leftTime
     
 }
+
 const secondsToTimmer = (seconds)=>{
 
     const date = new Date(null);
@@ -72,10 +75,6 @@ const getEndTime = (minutesToAdd) =>{
     const formated = formatDate(added)
     return formated
 }
-
-
-//console.log(getTimeLeft('2022-10-09 12:46:20+00:00'))
-
 
 export const timeHelper ={
     getCurrentDate,

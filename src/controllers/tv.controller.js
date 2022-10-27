@@ -3,48 +3,43 @@ import { response } from "express";
 import { Connection } from "promise-mysql";
 import { getConnection } from "../database/database";
 import {timeHelper} from "./../helpers/time.helper";
-import {dataBaseHelper} from "./../helpers/dataBase.helper";
+import {tvDbHelper} from "./../helpers/dataBase.helper";
 import { parse } from "dotenv";
 import { tvHelper } from "../helpers/tv.helper";
+import { clientDbHelper } from "../helpers/client.dataBase.helper";
 
 
 const activateTv = async (req, res)=>{
 
-
     try {
         //extraer datos
-        let {tvNumber, tvHours, tvMinutes, tvUser, tvPass } = req.body;
-        let tvNumber_form =  tvNumber;
-        let tvHours_form = tvHours;
-        let tvMinutes_form = tvMinutes;
-        let user_form = tvUser;
-        let pass_form = tvPass;
-  
+        let {activateTvNumber, activateTvHours, activateTvMinutes, activateTvUser, activateTvPass} = req.body;
+
+        
         //convertir a minutos
-        const leftMinutes = (Number(tvHours_form)*60) + Number(tvMinutes_form);
+        const leftMinutes = (Number(activateTvHours)*60) + Number(activateTvMinutes);
     
         //consultar si el televisor esta ocupado
-        const isActive = await dataBaseHelper.consultTvNumber(tvNumber_form);
+        const isActive = await tvDbHelper.consultTvNumber(activateTvNumber);
         
         //verifica user y pas si no responde con un error 
-        const user_form_prosseced = await dataBaseHelper.consultUserPass(user_form, pass_form);
+        const user = await clientDbHelper.consultUserPass(activateTvUser, activateTvPass);
         
         //consultar si el tiempo que se esta pidiendo se menor o igual al saldo en minutos disponible
-        await dataBaseHelper.consultUserLeftMinutes(leftMinutes, user_form_prosseced);
+        await clientDbHelper.consultUserLeftMinutes(leftMinutes, user);
         
         //RESTAR TIEMPO AL USUARIO
-        const updateClientLeftTimeResponse = await dataBaseHelper.updateClientMinutesLeft(user_form_prosseced, leftMinutes );
+        const updateClientLeftTimeResponse = await clientDbHelper.updateClientMinutesLeft(user, leftMinutes);
         
         //SUMAR TIEMPO AL EMPLEADO PENDIENTE
    
         //Actualizar la base de datos
-        await dataBaseHelper.updateTv(tvNumber_form, leftMinutes, user_form_prosseced);
+        await tvDbHelper.updateTv(activateTvNumber, leftMinutes, user);
         //Activar el televisor
-        tvHelper.activateTv(tvNumber_form)
+        tvHelper.activateTv(activateTvNumber)
         res.send("Equipo activado con exito");
     } catch (error) {
-        console.log(error)
-        res.send(error);
+        res.send(String(error));
     };
 
 };
@@ -52,32 +47,19 @@ const activateTv = async (req, res)=>{
 const deactivateTv = async (req, res)=>{
     try {
         tvHelper.deactivateTv(req.params['tvNumber'])
-        dataBaseHelper.deactivateTv(req.params['tvNumber'])
+        tvDbHelper.deactivateTv(req.params['tvNumber'])
         res.sendStatus(200)
         
     } catch (error) {
         res.send(500)
     }
-    //GET
-    //validar datos
-        //-revisar si la tv esta encendida o devolver error
-    
-    //si tiene usuario restar el tiempo
-
-
-
-    //si no tiene usuario sumar al empleado el tiempo
-
-    //apagar tv
-
-    //responder con el tiempo total
 };
 
 const tvInfo = async (req, res)=>{
 //Devuelve todos las propiedades actuales de Todos los TVs
     
     //consulta a la base de datos
-    const dbResponse = await dataBaseHelper.getTvInfo(req, res);
+    const dbResponse = await tvDbHelper.getTvInfo(req, res);
     res.json(dbResponse);
 
 };

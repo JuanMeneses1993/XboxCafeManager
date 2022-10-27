@@ -1,59 +1,40 @@
 
-const invertButton = (button)=>{
-
-    let isUser = document.getElementById("selector-si")
-    let isNotUser = document.getElementById("selector-no")
-    const input_user = document.getElementById('form-user');
-    const input_pass = document.getElementById('form-pass');
-    const checkbox = document.getElementById('no-registred-chbx')
-
-    
-
-    if (button === 'isUser'){
+const showUserPass =(event)=>{
         //ativar el boton
-        isUser.style.backgroundColor = 'var(--selector-active-color)';
+        withUser.style.backgroundColor = 'var(--selector-active-color)';
         //desactivar el otro boton
-        isNotUser.style.backgroundColor = 'var(--selector-inactive-color)';
+        withOutUser.style.backgroundColor = 'var(--selector-inactive-color)';
+        
         //mostrar usuario y pass
-        input_user.style.visibility= "visible";
-        input_pass.style.visibility= "visible";
+        userInput.style.visibility= "visible";
+        passInput.style.visibility= "visible";
 
 
         //cambiar valores de user y pass para procesarlo en el servidor
-        input_user.value='';
-        input_pass.value= '';
-    }
-    else{
-        //ativar el boton
-        isNotUser.style.backgroundColor = 'var(--selector-active-color)';
-        //desactivar el otro boton
-        isUser.style.backgroundColor = 'var(--selector-inactive-color)';
-       
-        //ocultar usuario y pass
-        input_user.style.visibility= "hidden";
-        input_pass.style.visibility= "hidden";
+        userInput.value='';
+        passInput.value= '';
 
-        //cambiar valores de user y pass para procesarlo en el servidor
-        input_user.value='none';
-        input_pass.value= 'none';
-
-    }
-} 
-
-let closeTv = async (tvNumber)=>{
-    //confirmar solicitud
-    let userInput = prompt("Escriba yes para aceptar")
-    let lowerUserInput = userInput.toLowerCase()
-
-    if (lowerUserInput !== 'yes'){
-        return
-    }
-
-    //hacer un fetch
-    try {
-        let serverResponse = await fetch(`/tv/${tvNumber}`, {method:'DELETE'})
-        console.log( await serverResponse.text()) 
-    } catch (error) {
-        console.log(error)
-    }
 }
+
+const hiddeUserPass = ()=>{
+    //ativar el boton
+    withUser.style.backgroundColor = 'var(--selector-inactive-color)';
+    //desactivar el otro boton
+    withOutUser.style.backgroundColor = 'var(--selector-active-color)';
+    
+    //ocultar usuario y pass
+    userInput.style.visibility= "hidden";
+    passInput.style.visibility= "hidden";
+    
+    //cambiar valores de user y pass para procesarlo en el servidor
+    userInput.value='none';
+    passInput.value= 'none';
+}
+
+let withUser = document.getElementById("selector-si")
+let withOutUser = document.getElementById("selector-no")
+const userInput = document.getElementById('form-user');
+const passInput = document.getElementById('form-pass');
+
+withUser.addEventListener('click',showUserPass);
+withOutUser.addEventListener('click',hiddeUserPass);

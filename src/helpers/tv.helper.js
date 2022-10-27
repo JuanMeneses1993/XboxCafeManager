@@ -17,7 +17,6 @@ const tvs = {
 let  activateTv = (tvNumber)=>{
     try {
         console.log(`Activando Tv ${tvNumber}`)
-    //conectarse y activar el puerto hdmi de la xbox
     //const syncDir = cmd.runSync(`adb connect ${tvs[tvNumber]} & adb shell input keyevent 244`);
     //console.log(`Salida de la consola:\n ${syncDir.data}`);
         

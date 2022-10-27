@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import tv from "./routes/tv.routes";
+import client from "./routes/client.routes"
 import bodyParser from "body-parser";
 import cors from "cors"
 
@@ -20,5 +21,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 // Routes
 app.use("/tv", tv);
+app.use("/client", client);
 
 export default app;
