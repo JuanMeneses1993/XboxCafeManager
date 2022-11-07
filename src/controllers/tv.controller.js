@@ -3,11 +3,11 @@ import { response } from "express";
 import { Connection } from "promise-mysql";
 import { getConnection } from "../database/database";
 import {timeHelper} from "./../helpers/time.helper";
-import {tvDbHelper} from "./../helpers/dataBase.helper";
+import {tvDbHelper} from "../helpers/tv.db.helper";
 import { parse } from "dotenv";
 import { tvHelper } from "../helpers/tv.helper";
-import { clientDbHelper } from "../helpers/client.dataBase.helper";
-
+import { clientDbHelper } from "../helpers/client.db.helper";
+import { historyDbHelper } from "../helpers/history.db.helper";
 
 const activateTv = async (req, res)=>{
 
@@ -15,30 +15,51 @@ const activateTv = async (req, res)=>{
         //extraer datos
         let {activateTvNumber, activateTvHours, activateTvMinutes, activateTvUser, activateTvPass} = req.body;
 
-        
-        //convertir a minutos
-        const leftMinutes = (Number(activateTvHours)*60) + Number(activateTvMinutes);
-    
         //consultar si el televisor esta ocupado
-        const isActive = await tvDbHelper.consultTvNumber(activateTvNumber);
+        await tvDbHelper.isTvActive(activateTvNumber);  
         
-        //verifica user y pas si no responde con un error 
+        const getMinutes = async()=>{
+            //caso de ser unlimited 
+            if (activateTvHours === 'unlimited' && activateTvUser != 'none'){
+                //Pone un limite del tiempo que tenga el usuario disponible en su cuenta
+                return await clientDbHelper.getClientLeftMinutes(activateTvUser)
+            }
+            else if(activateTvHours === 'unlimited'){
+                //Si se activa sin usuario y sin tiempo limite se pone un limite de 8 horas.
+                const MINUTES_IN_EIGHT_HOURS = 480;
+                return MINUTES_IN_EIGHT_HOURS
+            }
+            else return (Number(activateTvHours)*60) + Number(activateTvMinutes);
+        }
+        
+        const getState = ()=>{
+            if (activateTvHours === 'unlimited') return 'unlimited'
+            else return 'active';
+        }
+        
+        const mode = getState()
+        const totalMinutes = await getMinutes()
+        const currentEmployee = req.session.user
+
+        //verifica user y pass, si no responde con un error 
         const user = await clientDbHelper.consultUserPass(activateTvUser, activateTvPass);
-        
-        //consultar si el tiempo que se esta pidiendo se menor o igual al saldo en minutos disponible
-        await clientDbHelper.consultUserLeftMinutes(leftMinutes, user);
-        
+
+        //El usuario tiene tiempo suficiente?
+        await clientDbHelper.haveEnoughtTime(totalMinutes, user);
+      
         //RESTAR TIEMPO AL USUARIO
-        const updateClientLeftTimeResponse = await clientDbHelper.updateClientMinutesLeft(user, leftMinutes);
-        
-        //SUMAR TIEMPO AL EMPLEADO PENDIENTE
+        await clientDbHelper.substractMinutesToClient(user, totalMinutes, mode);
+
    
-        //Actualizar la base de datos
-        await tvDbHelper.updateTv(activateTvNumber, leftMinutes, user);
-        //Activar el televisor
-        tvHelper.activateTv(activateTvNumber)
-        res.send("Equipo activado con exito");
+        //Escribir datos en la base de datos
+        await tvDbHelper.writeTvDb(activateTvNumber, totalMinutes, user, mode, currentEmployee);
+        
+        //Prender el televisor
+        tvHelper.activateTv(activateTvNumber);
+        res.send(`Equipo ${(activateTvNumber)} activado`);
+
     } catch (error) {
+        console.log(error)
         res.send(String(error));
     };
 
@@ -46,26 +67,26 @@ const activateTv = async (req, res)=>{
 
 const deactivateTv = async (req, res)=>{
     try {
-        tvHelper.deactivateTv(req.params['tvNumber'])
-        tvDbHelper.deactivateTv(req.params['tvNumber'])
-        res.sendStatus(200)
+        await historyDbHelper.createHistoryRow(req.params['tvNumber'])
+        await tvDbHelper.resetTvDb(req.params['tvNumber']);
+        tvHelper.deactivateTv(req.params['tvNumber']);
+        res.sendStatus(200);
         
     } catch (error) {
         res.send(500)
     }
 };
 
-const tvInfo = async (req, res)=>{
+const getTvsInfo = async (req, res)=>{
 //Devuelve todos las propiedades actuales de Todos los TVs
     
     //consulta a la base de datos
-    const dbResponse = await tvDbHelper.getTvInfo(req, res);
+    const dbResponse = await tvDbHelper.getTvsInfo();
     res.json(dbResponse);
-
 };
 
 export const tvController = {
     activateTv,
     deactivateTv,
-    tvInfo,
+    getTvsInfo,
 }

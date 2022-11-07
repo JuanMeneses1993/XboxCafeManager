@@ -1,19 +1,19 @@
 const showResponse = (serverResponse)=>{
-    const responseElement = document.getElementById('server-responses')
-    responseElement.textContent = `${serverResponse}`
+    const responseElement = document.getElementById('server-responses');
+    responseElement.textContent = `${serverResponse}`;
 
-    hiddeAll()
+    hiddeAll();
 
-    //borrar despues de 2 segundos
+    //borrar despues de 10 segundos
     setTimeout(()=>{
         responseElement.innerHTML= '';
 
-    }, 10000)
-}
+    }, 10000);
+};
 
 const sendActivateTvForm = async(event)=>{
-    event.preventDefault()
-    const {activateTvNumber, activateTvHours, activateTvMinutes, activateTvUser, activateTvPass} = event.target
+    event.preventDefault();
+    const {activateTvNumber, activateTvHours, activateTvMinutes, activateTvUser, activateTvPass} = event.target;
 
     const serverResponse = await fetch('/tv/', {
         method:"POST",
@@ -25,44 +25,41 @@ const sendActivateTvForm = async(event)=>{
             'activateTvUser':activateTvUser.value,
             'activateTvPass':activateTvPass.value
         })
-    })
+    });
 
-    const responseText = await serverResponse.text()
+    const responseText = await serverResponse.text();
 
-    if (responseText === 'Equipo activado con exito'){
-        //borrar formulario
-        activateTvNumber.value = '0';
-        activateTvHours.value = '0'; 
-        activateTvMinutes.value = '00';
-        activateTvUser.value = 'none';
-        activateTvPass.value = 'none';
-    }
 
-    showResponse(responseText)
-}
+    if (serverResponse.status === 200){
+        //resetear formulario
+        event.target.reset();
+    };
+
+    showResponse(responseText);
+};
 
 const sendClientCheckForm = async(event)=>{
     event.preventDefault()
-    const {clientCheckUser} = event.target
+    const {clientCheckUser} = event.target;
 
-    const userName = clientCheckUser.value
+    const userName = clientCheckUser.value;
 
     const serverResponse = await fetch(`/client/${userName}`, {
         method:"GET",
         headers:{'Content-type' : 'application/json'},
-    })
+    });
 
     const responseText = await serverResponse.text()
 
     //borrar formulario
-    clientCheckUser.value = '';
+    event.target.reset();
 
-    showResponse(`Usuario ${userName} ${responseText}`)
-}
+    showResponse(`${responseText}`);
+};
 
 const sendClientRegistrationForm = async (event)=>{
     event.preventDefault()
-    const {clientRegistrationUser, clientRegistrationPass, clientRegistrationPassRepeat} = event.target
+    const {clientRegistrationUser, clientRegistrationPass, clientRegistrationPassRepeat} = event.target;
 
     const serverResponse = await fetch('/client/', {
         method:"POST",
@@ -72,23 +69,21 @@ const sendClientRegistrationForm = async (event)=>{
             'clientRegistrationPass':clientRegistrationPass.value, 
             'clientRegistrationPassRepeat':clientRegistrationPassRepeat.value,
         })
-    })
+    });
 
-    const responseText = await serverResponse.text()
+    const responseText = await serverResponse.text();
 
     if (responseText === 'Usuario creado satisfactoriamente'){
-        //borrar formulario
-        clientRegistrationUser.value = '';
-        clientRegistrationPass.value = ''; 
-        clientRegistrationPassRepeat.value = '';
-    }
+        //resetear formulario
+        event.target.reset();
+    };
 
-    showResponse(responseText)
-}
+    showResponse(responseText);
+};
 
 const sendClientUpdateForm = async (event)=>{
-    event.preventDefault()
-    const {clientUpdateUser, clientUpdateHours} = event.target
+    event.preventDefault();
+    const {clientUpdateUser, clientUpdateHours} = event.target;
 
     const serverResponse = await fetch('/client/', {
         method:"PATCH",
@@ -97,18 +92,18 @@ const sendClientUpdateForm = async (event)=>{
             'clientUpdateUser': clientUpdateUser.value, 
             'clientUpdateHours': clientUpdateHours.value, 
         })
-    })
+    });
 
-    const responseText = await serverResponse.text()
+    const responseText = await serverResponse.text();
 
-    if (responseText === 'Tiempo agregado satisfactoriamente'){
-        //borrar formulario
-        clientUpdateUser.value = '';
-        clientUpdateHours.value = '00'; 
+    if (responseText === 'Tiempo agregado'){
+        //resetear formulario
+        event.target.reset();
     }
 
-    showResponse(responseText)
-}
+    showResponse(responseText);
+};
+
 
 document.getElementById('activate-tv__form')
 .addEventListener('submit', sendActivateTvForm);

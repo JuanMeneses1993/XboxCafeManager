@@ -1,0 +1,18 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<div class="navigation-bar">
+  <H3 class="nav__user">Administrador <%= user.name%></H3>
+  <%- include('../partials/admin-buttons') %>
+  <%- include('../partials/employee-buttons') %>
+</div>
+
+<div class="control-panel">
+  <%- include('../partials/admin-controls') %>
+  <%- include('../partials/employee-controls') %>
+</div>
+
+<%- include('../partials/tvs-container') %>
+
+<%- include('../partials/footer') %>
+<script src="/public/javaScript/sendAdminForms.js"></script>
+

@@ -7,30 +7,30 @@ import{format, toDate, utcToZonedTime} from 'date-fns-tz'
 function getCurrentDate(){
 //Devuelve la fecha y la hora actual en gmt+0
 //Devuelve un objeto de la clase Date
-    const parsedDate = toDate(new Date())
-    const azoresDate = utcToZonedTime(parsedDate, 'Atlantic/Azores')
-    const currentDate = format(azoresDate, 'yyyy-MM-dd HH:mm:ssxxx', { timeZone: 'Atlantic/Azores' })
-    const currentDateParsed = parseDate(currentDate)
+    const parsedDate = toDate(new Date());
+    const azoresDate = utcToZonedTime(parsedDate, 'Africa/Abidjan');
+    const currentDate = format(azoresDate, 'yyyy-MM-dd HH:mm:ssxxx', { timeZone: 'Africa/Abidjan' });
+    const currentDateParsed = parseDate(currentDate);
     
-    return currentDateParsed
+    return currentDateParsed;
     
-}
+};
 
 function parseDate(date){
     //Devuelve un objeto Date con la fecha que le pasemos 
     //en el formato 'yyyy-MM-dd HH:mm:ssxxx'
-    const parsed = toDate(new Date(date), { timeZone: 'Atlantic/Azores' })
+    const parsed = toDate(new Date(date), { timeZone: 'Africa/Abidjan' });
     
-    return parsed
+    return parsed;
 }
 
 function formatDate(date){
-    const parsedDate = toDate(new Date(date))
-    const azoresDate = utcToZonedTime(parsedDate, 'Atlantic/Azores')
-    const formated = format(azoresDate, 'yyyy-MM-dd HH:mm:ssxxx', { timeZone: 'Atlantic/Azores' })
+    const parsedDate = toDate(new Date(date));
+    const azoresDate = utcToZonedTime(parsedDate, 'Africa/Abidjan');
+    const formated = format(azoresDate, 'yyyy-MM-dd HH:mm:ssxxx', { timeZone: 'Africa/Abidjan' });
     
-    return formated
-}
+    return formated;
+};
 
 function getTimeLeft(endTime){
     //recibe una fecha como parametro 
@@ -39,47 +39,68 @@ function getTimeLeft(endTime){
 
     //si el valor que se le pasa es completado devuelve 00:00:00
     if (endTime === 'completado'){
-        return '00:00:00'
-    }
+        return 'completado';
+    };
 
     //revisar si la fecha final es mayor que la actual
-    const endTimeParsed = parseDate(endTime)
+    const endTimeParsed = parseDate(endTime);
     if (isAfter(getCurrentDate(), endTimeParsed)){
         //revisar y actualizar todos los end time
         //dataBaseHelper.updateTimeEnd()
         //y devolver 00:00:00
-        return '00:00:00'
-    }
+        return 'completado'
+    };
     //pasar el tiempo restante a segundos
-    const secondsLeft = differenceInSeconds(endTimeParsed, getCurrentDate())
+    const secondsLeft = differenceInSeconds(endTimeParsed, getCurrentDate());
     
     //transformar los segundos a un contador en formato HH:mm:ss
-    const leftTime = secondsToTimmer(secondsLeft)
-    return leftTime
+    const leftTime = secondsTotimer(secondsLeft);
+    return leftTime;
     
-}
+};
 
-const secondsToTimmer = (seconds)=>{
+function getTimeEnlapsed(startTime, endTime=getCurrentDate()){
+
+    const startTimeParsed = parseDate(startTime)
+
+    const secondsEnlapded = differenceInSeconds(endTime, startTimeParsed )
+    
+    //transformar los segundos a un contador en formato HH:mm:ss
+    const enlapsedTime = secondsTotimer(secondsEnlapded)
+    return enlapsedTime
+    
+};
+
+const secondsTotimer = (seconds)=>{
 
     const date = new Date(null);
     //agregar los segundos
     date.setSeconds(seconds); 
     const formated = date.toISOString().slice(11, 19);
     return formated
-    
-}
+};
 
-const getEndTime = (minutesToAdd) =>{
+const timerToMinutes = (timer)=>{
+    const hours = Number(timer.slice(0,2));
+    const minutes = Number(timer.slice(3,5));
+
+    const totalMinutes = (hours * 60) + minutes;
+    return totalMinutes;
+};
+
+const calculateEndingTime = (minutesToAdd) =>{
     const currentDate = getCurrentDate()
     const added = addMinutes(currentDate, minutesToAdd)
     const formated = formatDate(added)
     return formated
-}
+};
 
 export const timeHelper ={
     getCurrentDate,
     parseDate,
     formatDate,
     getTimeLeft,
-    getEndTime,
+    calculateEndingTime,
+    getTimeEnlapsed,
+    timerToMinutes
 }

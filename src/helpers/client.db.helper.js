@@ -16,38 +16,53 @@ const isUserExist = async (userName)=>{
     } catch (error) {
         throw new Error(error)
     }
-}
+};
 
-const createNewClient = async (user, pass)=>{
+const createNewClient = async (userName, pass)=>{
     try {
+        
+        const userFormated =  userName.replace(/\s+/g, '').toLowerCase();
         const leftMinutes = '0'
-        const client = {user, pass, leftMinutes};
+        const client = {'user':userFormated, pass, leftMinutes};
         const connection = await getConnection();
         const result = await connection.query("INSERT INTO clientes SET ?", client);
         
     } catch (error) {
+        console.error(error)
         throw new Error('Error al agregar cliente')
     }
 
-}
+};
 
 const getClientLeftMinutes = async (userName)=>{
     try {
+        if (userName === 'none'){
+            return 'unlimited'
+        };
+
+        const userFormated =  userName.replace(/\s+/g, '').toLowerCase();
         const connection = await getConnection();
-        const dbResponse= await connection.query("SELECT leftMinutes FROM clientes WHERE user = ?", userName)
+        const dbResponse= await connection.query("SELECT leftMinutes FROM clientes WHERE user = ?", userFormated)
 
         return dbResponse[0]['leftMinutes']
         
     } catch (error) {
-        throw new Error(error)
+        throw new Error('Usuario no encontrado')
     }
 
-}
+};
 
 const addMinutesToClient = async (userName, hours, minutes)=>{
     try {
+        if (userName === 'none'){
+            throw new Error('Usuario no valido')
+        }
+
+        //eliminar espacios y poner en minusculas
+        const userFormated = userName.replace(/\s+/g, '').toLowerCase();
+
         //obtener los minutos actuales de ese usuario
-        const dataBaseLeftMinutes = await clientDbHelper.getClientLeftMinutes(userName)
+        const dataBaseLeftMinutes = await clientDbHelper.getClientLeftMinutes(userFormated)
 
         //convertir a minutos
         const totalMinutes = (Number(hours) * 60) + Number(minutes)
@@ -57,47 +72,51 @@ const addMinutesToClient = async (userName, hours, minutes)=>{
         
         //Actualizar la base de datos
         const connection = await getConnection();
-        const result = await connection.query(`UPDATE clientes SET leftMinutes = ${leftMinutesUpdated} WHERE user = ?`,userName);
+        const result = await connection.query(`UPDATE clientes SET leftMinutes = ${leftMinutesUpdated} WHERE user = ?`,userFormated);
         
     } catch (error) {
         throw new Error ('Usuario no valido')
     }
-}
+};
 
-const updateClientMinutesLeft = async (user, minutesLeft)=>{
+const substractMinutesToClient = async (userName, minutes, mode)=>{
     try {
-
-        if (user === 'Anonimous User'){
+        //Sale si el usuario es anonimo o se activo por tiempo libre
+        if (userName === 'Anonymous User' || mode === 'unlimited'){
             return
-        }
+        };
         
+        const userFormated =  userName.replace(/\s+/g, '').toLowerCase();
+
         //consulta a la base de datos
         const connection = await getConnection();
-        const leftMinutesUpdated = await connection.query(`SELECT leftMinutes FROM clientes WHERE user = ?`, user)
+        const leftMinutesUpdated = await connection.query(`SELECT leftMinutes FROM clientes WHERE user = ?`, userFormated)
             .then(DBResponse=>{
-                return((Number(DBResponse[0].leftMinutes)) - (Number(minutesLeft)));
+                return((Number(DBResponse[0].leftMinutes)) - (Number(minutes)));
             });
 
         //actualizar los datos
-        const result = await connection.query(`UPDATE clientes SET leftMinutes = ${leftMinutesUpdated} WHERE user = ?`,user);
+        const result = await connection.query(`UPDATE clientes SET leftMinutes = ${leftMinutesUpdated} WHERE user = ?`,userFormated);
 
     } catch (error) {
         throw new Error(error)
     }
 };
 
-const consultUserLeftMinutes = async (minutesLeft, user_form)=>{
+const haveEnoughtTime = async (minutesLeft, userName)=>{
     //Revisa en la base de datos el tiempo que le queda al usuario
     //si el tiempo solicitado es mayor al disponible devuelve un error
     try {
-        //Si el usuario es anonimo sale de la funcion
-        if (user_form === 'Anonimous User'){
-            return;
+        //Sale si el usuario es anonimo o se activo por tiempo libre
+        if (userName === 'Anonymous User' || userName === 'unlimited'){
+            return
         };
-    
+
+        const userFormated =  userName.replace(/\s+/g, '').toLowerCase();
+
         //consulta la base de datos
         const connection = await getConnection();
-        const leftMinutesDB = await connection.query("SELECT leftMinutes FROM clientes WHERE user = ?", user_form)
+        const leftMinutesDB = await connection.query("SELECT leftMinutes FROM clientes WHERE user = ?", userFormated)
         
         //comparar si tiene tiempo suficiente
         if ( Number(Number(leftMinutesDB[0].leftMinutes)) < minutesLeft) {
@@ -115,7 +134,7 @@ const consultUserPass = async(user, pass)=>{
     try {
         //verificar la maquina sera activada sin usuario
         if (user === 'none' || pass === 'none'){     
-            return 'Anonimous User';
+            return 'Anonymous User';
         };
         
         //formatear usuario(en minusculas y sin espacios ni saltos de linea)
@@ -143,14 +162,12 @@ const consultUserPass = async(user, pass)=>{
 
 };
 
-
 export const clientDbHelper ={
     isUserExist,
     createNewClient,
     getClientLeftMinutes,
     addMinutesToClient,
-    updateClientMinutesLeft,
-    consultUserLeftMinutes,
+    substractMinutesToClient,
+    haveEnoughtTime,
     consultUserPass
-
 }

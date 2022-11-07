@@ -3,19 +3,21 @@ import { response } from "express";
 import { Connection } from "promise-mysql";
 import { getConnection } from "../database/database";
 import {timeHelper} from "./../helpers/time.helper";
-import {dataBaseHelper} from "./../helpers/dataBase.helper";
+import {dataBaseHelper} from "../helpers/tv.db.helper";
 import { parse } from "dotenv";
 import { tvHelper } from "../helpers/tv.helper";
-import { clientDbHelper } from "../helpers/client.dataBase.helper";
+import { clientDbHelper } from "../helpers/client.db.helper";
+
+import { verifiers } from "../helpers/verifiers.helper";
 
 
 const getUserMinutes = async (req, res)=>{
     try {
-        const user_form = req.params['userName']
-        console.log(user_form)
-        const leftMinutes = await clientDbHelper.getClientLeftMinutes(user_form);
-        
-        res.send(String(leftMinutes))
+        const userName = req.params['userName']
+        const leftMinutes = await clientDbHelper.getClientLeftMinutes(userName);
+        const hours = Math.floor(Number(leftMinutes) / 60)
+        const minutes = (Number(leftMinutes) - (hours*60))
+        res.send(`${hours} horas ${minutes} minutos`)
         
     } catch (error) {
         res.status(400).send(String(error))
@@ -37,11 +39,12 @@ const addMinutesToUser = async (req, res)=>{
         await clientDbHelper.addMinutesToClient(clientUpdateUser, clientUpdateHours, '0')
         
 
-        res.status(200).send('Tiempo agregado satisfactoriamente')
+        res.status(200).send('Tiempo agregado')
     } catch (error) {
         console.error(error)
         res.send(String(error))
     }
+
 };
 
 const createNewUser = async (req, res)=>{
@@ -49,10 +52,11 @@ const createNewUser = async (req, res)=>{
         //extraer los datos
         const {clientRegistrationUser, clientRegistrationPass, clientRegistrationPassRepeat} = req.body
 
+        //Verificar que la clave tenga por lo menor 8 caracteres
+        verifiers.isPassFormatCorrect(clientRegistrationPass)
+
         //verificar si las contrasenas son iguales
-        if (clientRegistrationPass !== clientRegistrationPassRepeat){
-            throw new Error ('Las claves no coinciden')
-        }
+        verifiers.isPasswordsMatch(clientRegistrationPass, clientRegistrationPassRepeat)
 
         //revisar si el nombre de usuario ya esta en uso
         await clientDbHelper.isUserExist(clientRegistrationUser)
