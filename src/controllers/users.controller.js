@@ -3,6 +3,7 @@ import { response } from "express";
 import { parse } from "dotenv";
 import { userDbHelper } from "../helpers/users.db.helper";
 import { verifiers } from "../helpers/verifiers.helper";
+import { historyDbHelper } from "../helpers/history.db.helper";
 
 
 const checkUserPass = async(req, res)=>{
@@ -11,16 +12,19 @@ const checkUserPass = async(req, res)=>{
 
         if (!user || !pass) {
             res.send('error de logueo');
+            return 
         }
-        console.log(user, pass)
+   
         await userDbHelper.consultUserPass(user, pass);
         const role = await userDbHelper.getUserRole(user);
 
         req.session.user = user;
         req.session.role = role;
-        res.send('ok');
+        res.send('ok')
+
     } catch (error) {
-        res.send('error de logueo')
+        return res.send(String(error));
+        
     }
 };
 
@@ -39,18 +43,20 @@ const readUser = async(req, res)=>{
 
 const readUsers = async(req, res)=>{
     
-// Informacion de los empleados
 
-// tiempo activo mes
-// tiempo activo semana
-
-// tiempo vendido mes
-// tiempo vendido semana
-// tiempo vendido dia
 };
 
-const readTotal = async(req, res)=>{
+const getStatistics = async(req, res)=>{
+try {
+	    //Devuelve un objeto con todas las estadisticas
+	    const rows = await historyDbHelper.getStatistics();
+        
 
+        res.send(rows)
+
+} catch (error) {
+	res.send(String(error))
+};
 };
 
 const deleteUser = async(req, res)=>{
@@ -64,5 +70,6 @@ export const usersController = {
     readUser,
     readUsers,
     createUser,
-    deleteUser
+    deleteUser,
+    getStatistics
 };

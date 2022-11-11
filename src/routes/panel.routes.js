@@ -3,11 +3,14 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/", (req, res)=>{
-    const user = {name : req.session.user}
-    if(req.session.role === 'admin'){
-        res.render('pages/admin-panel', {user});
-    }
-    else res.render('pages/employee-panel', {user});
+    
+    res.render('pages/panel', {
+        buttons: `../partials/${String(req.session.role)}-buttons`,
+        controls: `../partials/${String(req.session.role)}-controls`, 
+        footer: `../partials/${String(req.session.role)}-footer`, 
+        info : {user: req.session.user}
+    });
+    
 });
 
 

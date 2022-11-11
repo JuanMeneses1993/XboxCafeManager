@@ -82,7 +82,7 @@ const addMinutesToClient = async (userName, hours, minutes)=>{
 const substractMinutesToClient = async (userName, minutes, mode)=>{
     try {
         //Sale si el usuario es anonimo o se activo por tiempo libre
-        if (userName === 'Anonymous User' || mode === 'unlimited'){
+        if (userName === 'Anonymous' || mode === 'unlimited'){
             return
         };
         
@@ -108,7 +108,7 @@ const haveEnoughtTime = async (minutesLeft, userName)=>{
     //si el tiempo solicitado es mayor al disponible devuelve un error
     try {
         //Sale si el usuario es anonimo o se activo por tiempo libre
-        if (userName === 'Anonymous User' || userName === 'unlimited'){
+        if (userName === 'Anonymous' || userName === 'unlimited'){
             return
         };
 
@@ -134,7 +134,7 @@ const consultUserPass = async(user, pass)=>{
     try {
         //verificar la maquina sera activada sin usuario
         if (user === 'none' || pass === 'none'){     
-            return 'Anonymous User';
+            return 'Anonymous';
         };
         
         //formatear usuario(en minusculas y sin espacios ni saltos de linea)
@@ -156,7 +156,7 @@ const consultUserPass = async(user, pass)=>{
         return userResponse
         
     } catch (error) {
-        throw new Error(error)
+        throw new Error('Invalid User Pass')
     }
     
 

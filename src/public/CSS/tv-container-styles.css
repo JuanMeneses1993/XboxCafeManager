@@ -2,7 +2,7 @@
 .navigation-bar{
     grid-row: 2/3;
     grid-column: 1/2;
-    background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.8));
+    background: var(--background-nav);
     display:flex;
     flex-direction: column;
     justify-content: center;
@@ -23,7 +23,7 @@
     /* border: 1px solid var(--nav-button-border-color); */
     border-radius: 10px;
 
-    text-shadow: 0px 0px 2px rgba(0, 17, 255, 0.89);
+    text-shadow: 0px 0px 2px var(--text-shadow);
     box-shadow: --box-shadow;
     display: flex;
     align-items: center;
@@ -48,41 +48,65 @@
     box-shadow: var(--box-shadow)
 }
 
-.tv__content{
-    display: flex;
-    justify-content: space-between;
-}
-
 .tv__number{
+    grid-column: 1/2;
+    border-radius: 10px;
+    background: radial-gradient( rgba(67, 63, 255, 0.123) 0% 10%, transparent 60% 100%);
+    margin: 5px 10px;
+    display: grid;
+    place-content: center;
     font-weight: lighter;
-    font-size: 1.5em;
-    margin-left:20px;
-    margin-right:40px;
-    width:50px;
+    font-size: 1em;
     text-align: center;
-    color:#7C8C92;
-    text-shadow: 1px 1px 15px  #43517B;
+    color:var(--text-main-color);
+
+    text-shadow: var(--text-shadow);
+
+
+    /* text-shadow: 1px 1px 15px  #43517B; */
 
 }
 
 .tv__leftTime{
-    font-size: 1.3em;
+    background: linear-gradient(to top, transparent, rgba(0, 255, 42, 0.05), transparent);
+    padding-left: 20px;
+    font-size: 1em;
     text-align: center;
     border-radius: 10px;
     font-weight: lighter;
+    border-left: 1px solid rgba(98, 153, 255, 0.116);
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    border-bottom: none;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 20px;
+    justify-content: flex-start;
+    align-items: center;
+    letter-spacing: 8px;
+    
 }
 
 .tv{
+    z-index: 1;
+    margin: 5px;
     font-size: 3.5em;
     font-weight: lighter;
-    border-radius: 5px;
-    background-color: #161b2c39;
-    display: flex;
-    justify-content:space-between;
+    border-radius: 8px;
+    background: var(--background-tv);
+    display: grid;
+    grid-template-columns: auto auto 75% ;
+    grid-template-rows: 1fr;
+    opacity: 90%;
+    margin-right:5px ;
+    border: 1px solid var(--borders);
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1.5px solid rgba(3, 10, 71, 0.5);
+    border-left: 1.5px solid rgba(4, 3, 71, 0.301);
+}
+
+.tv:hover{
+    opacity: 100%;
+    background: var(--background-tvHover);
+    border-left: 0;
 }
 
 /* .tv:hover{
@@ -91,105 +115,109 @@
     border:2px solid rgba(0, 0, 255, 0.493)
 } */
 
-.tv__close-icon{
+.tv__icon{
+
+    grid-column: 2/3;
+    grid-row: 1/2;
+    display: grid;
+    place-content: center;
+}
+
+.tv__close-icon , .tv__add-icon{
     box-sizing: border-box;
     width: 30px;
     height: 30px;
-    margin: auto 0;
-    margin-right: 10px;
-    padding:8px;
+    padding:6px;
+    display: grid;
+    grid-column: 1fr;
+    place-content: center;
+    opacity: 80%;
+
 }
 
-.tv__close-icon:hover{
-    opacity: 70%;
-    padding:0;
-}
-
-.tv__close-icon--inactive{
-    display:none;
-}
-
-.tv__close-icon--active{
-    display:inline;
+.tv__close-icon:hover, .tv__add-icon:hover{
+    opacity: 100%;
+    padding:4px;
 }
 
 .tv--inactive{
-    opacity: 60%;
-    background-color: rgba(0, 0, 0, 0.27);
-    color:rgba(255, 255, 255, 0.17);
-    text-shadow: 1px 1px 10px #8D7F7D;
+    color: var( --text-main-color);
+    opacity: 0%;
+
 }
 
 .tv--active{
-    background-color: rgba(172, 255, 47, 0.05);
     color:#8D7F7D;
-    box-shadow:var(--box-shadow);
-    border: 1px solid var(--borders);
+
+    
 }
 
 .tv--active:hover{
-    transform:scale(120%) translateX(-2vw);
     cursor: pointer;
 
 }
 
 .tv--unlimited{
     color:#7d8d80;
-    background-color: rgba(172, 255, 47, 0.05);
-    box-shadow:var(--box-shadow);
-    border: 1px solid var(--borders);
     position:relative;
-
 }
 
 .tv--unlimited:hover{
-    transform:scale(120%) translateX(-2vw);
     cursor: pointer;
 }
 
 .tv--unlimited::after{
     font-family: monospace;
+    letter-spacing: 2px;
     content:"Ilimitado";
-    font-size: 0.4em;
+    font-size: 0.25em;
     position: absolute;
     top:25%;
     bottom: 25%;
-    left: 22%;
+    right: 5px;
     display: grid;
     place-content: center;
     color:rgba(0, 255, 34, 0.575);
 }
 
 .tv__leftTime--completado{
-    border:none;
     color:transparent;
     animation-name: intermintent;
     animation-duration: 0.33s;
     animation-iteration-count: infinite;
     text-shadow: none;
     color:transparent;
+    border-left: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+    background: linear-gradient(to top, transparent, rgba(255, 0, 0, 0.05), transparent);
+    border-left: 1px solid rgba(98, 153, 255, 0.116);
 }
 
 @keyframes intermintent {
 
     50%, 100% {
-        color:red;
+        color:#a00003;
     }
 
 }
 
 .tvs-container{
-    margin-top: 50px;
+    
+    z-index: 0;
+    margin-top: 10%;
     grid-column: 3/4;
     grid-row: 2/3;
     display:grid;
-    grid-template-rows: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 10%);
     grid-template-columns: 1fr;
     border-left: 3px solid black;
-    margin-bottom: 36px;
+    
     box-shadow: var(--box-shadow);
     border-radius: 10px;
-    gap:2px
-
+    border: 1px solid rgba(32, 18, 109, 0.233);
+    margin-bottom:10%;
+    background: linear-gradient(-80deg, transparent, rgba(128, 128, 206, 0.048));
 }
+
+
 

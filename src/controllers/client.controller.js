@@ -27,16 +27,16 @@ const getUserMinutes = async (req, res)=>{
 const addMinutesToUser = async (req, res)=>{
     try {
         //extraer los datos
-        const {clientUpdateUser, clientUpdateHours} = req.body;
+        const {user, hours} = req.body;
 
         //validar datos
         //verificar si los minutos no son mayores a de 30 y si las horas no son mayores de 8 ni menores a 0
-        if (Number(clientUpdateHours) < 0 ||
-            Number(clientUpdateHours) > 8 ){
+        if (Number(hours) < 0 ||
+            Number(hours) > 8 ){
                 throw new Error ('Parametros de tiempo invalidos')
             }
         //actualizar los minutos en la base de datos
-        await clientDbHelper.addMinutesToClient(clientUpdateUser, clientUpdateHours, '0')
+        await clientDbHelper.addMinutesToClient(user, hours, '0')
         
 
         res.status(200).send('Tiempo agregado')
@@ -50,21 +50,21 @@ const addMinutesToUser = async (req, res)=>{
 const createNewUser = async (req, res)=>{
     try {
         //extraer los datos
-        const {clientRegistrationUser, clientRegistrationPass, clientRegistrationPassRepeat} = req.body
+        const {user, pass, passRepeat} = req.body
 
         //Verificar que la clave tenga por lo menor 8 caracteres
-        verifiers.isPassFormatCorrect(clientRegistrationPass)
+        verifiers.isPassFormatCorrect(pass)
 
         //verificar si las contrasenas son iguales
-        verifiers.isPasswordsMatch(clientRegistrationPass, clientRegistrationPassRepeat)
+        verifiers.isPasswordsMatch(pass, passRepeat)
 
         //revisar si el nombre de usuario ya esta en uso
-        await clientDbHelper.isUserExist(clientRegistrationUser)
+        await clientDbHelper.isUserExist(user)
         
         //agregar el cliente a la base de datos
-        await clientDbHelper.createNewClient(clientRegistrationUser, clientRegistrationPass)
+        await clientDbHelper.createNewClient(user, pass)
         
-        res.status(200).send('Usuario creado satisfactoriamente')
+        res.status(200).send('Usuario creado')
     } catch (error) {
         res.status(400).send(String(error))
     }

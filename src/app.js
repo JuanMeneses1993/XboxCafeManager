@@ -36,7 +36,7 @@ var adminAuth = function(req, res, next) {
   if (req.session.role === "admin"){
     return next();
   }
-  else return res.send('No autorizado');
+  else return res.render('pages/login');
 };
 
 var auth = function(req, res, next) {
@@ -44,10 +44,10 @@ var auth = function(req, res, next) {
   if (req.session.role === "employee" || req.session.role === "admin"){
     return next();
   }
-  else return res.send('No autorizado');
+  else return res.render('pages/login');
 };
 
-app.use(cors())
+app.use(cors());
 app.use('/public', express.static(__dirname+'/public'));
 //app.use(morgan("dev"));//mostrar las solicitudes
 app.use(express.json());
@@ -55,10 +55,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 // Routes
 app.get("/", (req, res)=> res.render('pages/login'));
-app.use("/panel",auth, panel);
+app.use("/panel", auth, panel); //modificar poner auth
 
 app.use("/login", login);
-app.use("/users", adminAuth, users);
+app.use("/users",adminAuth, users);
 app.use("/tv", auth, tv);
 app.use("/client", auth, client);
 app.use("/history", auth, history);

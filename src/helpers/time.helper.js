@@ -1,7 +1,46 @@
 
-import {isAfter,differenceInSeconds, addMinutes} from 'date-fns'
+import {isAfter,differenceInSeconds, addMinutes, startOfWeek} from 'date-fns'
 import{format, toDate, utcToZonedTime} from 'date-fns-tz'
 
+
+function getDateStartOfYear(){
+    const currentDate = getCurrentDate();
+    const currentDateFormated = formatDate(currentDate);
+    const date = currentDateFormated.slice(0, 5) + '01-01';
+    return date;
+};
+
+function getDateStartOfMonth(){
+    const currentDate = getCurrentDate();
+    const currentDateFormated = formatDate(currentDate);
+    const startOfMonthDate = currentDateFormated.slice(0, 8) + '01' + currentDateFormated.slice(10);
+    const date = startOfMonthDate.slice(0, 10);
+    return date;
+};
+
+function getDateStartOfWeek(){
+
+    const dateFormated = formatDate(startOfWeek(getCurrentDate())).slice(0, 10);
+    return dateFormated;
+
+};
+
+function getStartDate (filter){
+
+    try {
+        if (!filter) return;
+
+        if (filter === 'year') return getDateStartOfYear();
+        else if (filter === 'month') return getDateStartOfMonth();
+        else if (filter === 'week') return getDateStartOfWeek();
+        else if (filter === 'day') return formatDate(getCurrentDate()).slice(0, 10);
+    } catch (error) {
+        throw new Error('Error en getStartDate')
+    }
+
+
+
+};
 
 
 function getCurrentDate(){
@@ -102,5 +141,7 @@ export const timeHelper ={
     getTimeLeft,
     calculateEndingTime,
     getTimeEnlapsed,
-    timerToMinutes
+    timerToMinutes,
+    getStartDate,
+    secondsTotimer
 }

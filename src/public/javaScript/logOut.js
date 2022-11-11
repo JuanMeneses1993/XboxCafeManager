@@ -1,11 +1,11 @@
 const logOut = async ()=>{
     try {
         await fetch(`/login`, {method:'DELETE'})
-        window.location.replace("/")
+        window.location.reload()
     } catch (error) {
         console.log(error)
     };
 };
 
-document.getElementById('nav__button--log-out')
+document.getElementById('log-out__button')
 .addEventListener('click', logOut);

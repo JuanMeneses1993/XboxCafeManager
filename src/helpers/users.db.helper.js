@@ -11,7 +11,7 @@ const getUserRole = async (user)=>{
         return dbResponse[0]['role']
 
     } catch (error) {
-        throw new Error(error)
+        throw new Error('Error al buscar el role')
     }
 };
 
@@ -39,21 +39,44 @@ const consultUserPass = async(user, pass)=>{
         return userResponse
         
     } catch (error) {
-        throw new Error(error)
+        throw new Error("Invalid User Pass")
     }
     
 
 
 };
 
-const getUsersInfo = async ()=>{
-    
-}
-const getTotalInfo = async ()=>{
+const getNames = async ()=>{
+    try {
+        const connection = await getConnection();
+        const dbResponse = await connection.query(`SELECT user FROM users`);
+        const users =  dbResponse.map(user =>{return user.user});
 
-}
+        return users
+        
+    } catch (error) {
+        console.log(error)
+        throw new Error('Error consiguiendo nombre de los empleados')
+    }
+};
 
 export const userDbHelper ={
     consultUserPass,
-    getUserRole
+    getUserRole,
+    getNames,
+
 }
+
+
+/* 
+Pasos para la creacion de las estadisticas
+
+obtener los usuarios totales de la base de datos
+
+por cada uno de los usuarios buscar en la base de datos todos los registros de historial con ese usuario
+
+filtar esos registros con la suma total de horas en un mes semana y dia.
+
+
+
+*/
