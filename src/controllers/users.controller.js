@@ -34,15 +34,15 @@ const logOut = async(req, res)=>{
 };
 
 const createUser = async(req, res)=>{
+    try {
+        const {user, pass, passRepeat} = req.body;
+        await userDbHelper.createUser(user, pass)
+        res.send('Empleado creado')
         
-};
+    } catch (error) {
+        res.send(String(error))
+    }
 
-const readUser = async(req, res)=>{
-
-};
-
-const readUsers = async(req, res)=>{
-    
 
 };
 
@@ -60,15 +60,24 @@ try {
 };
 
 const deleteUser = async(req, res)=>{
-
+    try {
+        const {user} = req.body;
+        if (!user){ 
+            res.send('Debe de escribir un usuario')
+            return
+        }
+        await userDbHelper.deleteUser(user)
+        res.send('Empleado eliminado')
+        
+    } catch (error) {
+        res.send(String(error))
+    }
 };
 
 
 export const usersController = {
     checkUserPass,
     logOut,
-    readUser,
-    readUsers,
     createUser,
     deleteUser,
     getStatistics

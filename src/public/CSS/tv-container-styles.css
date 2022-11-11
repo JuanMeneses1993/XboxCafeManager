@@ -10,6 +10,12 @@
     transform: translateX(-19vw);
     box-shadow: var(--box-shadow);
     border-radius: 0 30px 0 0;
+    border: var(--borders);
+    font-family: monospace;
+    color: var(--text-second-color);
+    text-shadow: var(--text-shadow);
+    font-weight: bolder;
+    background-color:rgba(11, 11, 27, 0.274);
 
 }
 .navigation-bar:hover{
@@ -94,7 +100,7 @@
     display: grid;
     grid-template-columns: auto auto 75% ;
     grid-template-rows: 1fr;
-    opacity: 90%;
+    opacity: 60%;
     margin-right:5px ;
     border: 1px solid var(--borders);
     border-left: 0;

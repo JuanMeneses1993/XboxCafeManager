@@ -55,13 +55,24 @@ const addTotalHours = (history)=>{
     const minutes = history.map(row =>{ return row.timeActive.slice(3, 5)})
                     .reduce((cont, minute) =>{return cont + Number(minute)},0);
 
-    const SECONDS_IN_HOUR = 3600;
-    const SECONDS_IN_MINUTE = 60;
-    const totalSeconds = (hours * SECONDS_IN_HOUR) + (minutes * SECONDS_IN_MINUTE)
-    const timmer = timeHelper.secondsTotimer(totalSeconds)
-    const totalTimmer = timmer.slice(0, 5)
-    console.log(totalTimmer)
-    return totalTimmer
+
+    const convertToTimmer = (num)=>{
+        const numFormated = String(num)
+        if (numFormated.length === 1){
+            return '0' + numFormated;
+        }
+        else return numFormated
+    }
+
+    const MINUTES_IN_HOUR = 60
+    const totalHours = hours + (Math.floor(minutes/MINUTES_IN_HOUR));
+    const totalMinutes = ((minutes / MINUTES_IN_HOUR) - Math.floor(minutes/MINUTES_IN_HOUR)) * MINUTES_IN_HOUR
+    // const timmerMinutes = convertToTimmer(   );
+    const timmerHours = convertToTimmer(totalHours);
+    const timmerMinutes  = convertToTimmer(totalMinutes);
+    const timmer = timmerHours + ':' + timmerMinutes.slice(0, 2)
+
+    return timmer
 };
 
 const getHistory = async(employeeName, filter )=>{

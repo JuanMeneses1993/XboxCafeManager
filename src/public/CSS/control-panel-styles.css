@@ -11,13 +11,14 @@ body {
     --table-borders:1px solid #4748722d;
     --box-shadow: 0px 0px 20px #02011d60;
     
+    
     --background-header: linear-gradient(to right, rgba(35, 35, 70, 0.7), rgba(0, 0, 0, 0.5));
-    --background-userNav: linear-gradient(to right, rgba(35, 35, 70, 0.9) , rgba(35, 35, 70, 0.5));
-    --background-nav: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.8));
+    --background-userNav: linear-gradient(to right, rgba(35, 35, 70, 0.603) , rgba(35, 35, 70, 0.308));
+    --background-nav: linear-gradient(120deg, transparent, #0a0a14e5, transparent);
     --background-forms: linear-gradient(45deg, rgba(7, 4, 22, 0.6), rgba(0, 0, 0, 0.75));
     --background-tables: linear-gradient(45deg, rgba(7, 4, 22, 0.6), rgba(0, 0, 0, 0.75));
     --background-tv-container: linear-gradient(45deg, rgba(7, 4, 22, 0.6), rgba(0, 0, 0, 0.75));
-    --background-tv: linear-gradient(to bottom, #2323464b, #232346a8);
+    --background-tv: linear-gradient(to bottom, #2323464b, #232346a8 50%, #232346c0);
     --background-tvHover: linear-gradient(to bottom, #2323464b, #232346a8);
     max-width: 100vw;
     max-height: 100vh;
@@ -292,7 +293,7 @@ textarea:focus {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
-    
+
 }
 
 @keyframes show-form2 {
@@ -319,7 +320,7 @@ textarea:focus {
     font-family: monospace;
     padding:10px;
     box-shadow: var(--box-shadow);
-    font-size: 2.5em;
+    font-size: 1.8em;
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
@@ -352,7 +353,7 @@ textarea:focus {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    opacity: 80%;
+    opacity: 70%;
     border-collapse: collapse;
     background-color: #00000052;
 
@@ -378,7 +379,7 @@ textarea:focus {
     letter-spacing: 5px;
     text-align: center;
     color: var(--text-main-color);
-    border:1px solid rgba(0, 26, 170, 0.459);
+
     width:100%;
     display:grid;
     place-content: center;
@@ -388,9 +389,7 @@ textarea:focus {
 .table__row:hover {
     opacity: 100%;
 }
-.table__data:hover{
-    background-color: rgba(255, 255, 255, 0.192);
-}
+
 
 .table__row--total{
     border-bottom: none;
@@ -409,7 +408,7 @@ textarea:focus {
     background-color:var(--selector-active-color);
     height: 2em;
     letter-spacing: 5px;
-    color: var(--text-second-color);
+    color: rgba(202, 6, 6, 0.61);
     font-weight: lighter;
     font-size: 1.1em;
     border-color: black;
@@ -417,10 +416,15 @@ textarea:focus {
 }
 
 .table__data--date{
-    letter-spacing: 2px;
-    font-size: 0.5em;
+    letter-spacing: 1px;
+
 }
 
 .table__data--timeActive{
     color: red;
+}
+
+.table__data--tvNumber{
+    font-family: 'Rubik Glitch', cursive;
+    background-color:#232346 ;
 }

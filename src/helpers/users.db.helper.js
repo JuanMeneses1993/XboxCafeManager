@@ -60,10 +60,34 @@ const getNames = async ()=>{
     }
 };
 
+const createUser = async (user, pass)=>{
+
+    try {
+        
+        const userRow = { user, pass, role:'employee'};
+        const connection = await getConnection();
+        await connection.query(`INSERT INTO users SET ?`, userRow);
+
+    } catch (error) {
+        throw new Error('Error creando empleado')
+    }
+}
+const deleteUser = async (user)=>{
+    try {
+        const connection = await getConnection();
+        await connection.query(`DELETE FROM users WHERE user = '${user}'`);
+
+    } catch (error) {
+        throw new Error('Error borrando empleado')
+    }
+}
+
 export const userDbHelper ={
     consultUserPass,
     getUserRole,
     getNames,
+    createUser,
+    deleteUser
 
 }
 

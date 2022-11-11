@@ -37,6 +37,8 @@ const showResponse = (serverResponse)=>{
 };
 
 const sendNewEmployeeForm = async(event)=>{
+    console.log('Dentro de agregar empleado')
+
     event.preventDefault();
     const {user, pass, passRepeat} = event.target;
 
@@ -47,6 +49,29 @@ const sendNewEmployeeForm = async(event)=>{
             'user': user.value, 
             'pass': pass.value, 
             'passRepeat': passRepeat.value,
+        })
+    });
+
+    const responseText = await serverResponse.text();
+
+
+    if (serverResponse.status === 200){
+        //resetear formulario
+        event.target.reset();
+    };
+
+    showResponse(responseText);
+};
+
+const sendDeleteEmployeeForm = async(event)=>{
+    event.preventDefault();
+    const {user} = event.target;
+
+    const serverResponse = await fetch('/users/', {
+        method:"DELETE",
+        headers:{'Content-type' : 'application/json'},
+        body:JSON.stringify({
+            'user': user.value, 
         })
     });
 
@@ -126,7 +151,7 @@ const getHistory = async ()=>{
         historyTable.innerHTML = `
                             <thead><h2 class="table__title">Historial</h2></thead>
                             <tr class ="table__row table__row--head">
-                                <td class = " table__head table__head--tvNumber"> Nº </td>
+                                <td class = " table__head table__head--tvNumber"> Equipo </td>
                                 <td class = " table__head table__head--user">Usuario</td>
                                 <td class = " table__head table__head--user">Empleado</td>
                                 <td class = " table__head table__head--timeActive">Tiempo</td>
@@ -275,7 +300,6 @@ const sendClientUpdate = async(event)=>{
 
 const showElement = (event)=>{
     hiddeControls()
-
     const buttonName = event.target.id.slice(13);
     const elementId = buttonName + '__form';
     
@@ -284,6 +308,7 @@ const showElement = (event)=>{
 };
 
 const hiddeControls= ()=>{
+    
     newEmployee.style.display = 'none';
     deleteEmployee.style.display = 'none';
     statistics.style.display = 'none';
@@ -299,6 +324,9 @@ const hiddeControls= ()=>{
 
 document.getElementById('new-employee__form')
 .addEventListener('submit', sendNewEmployeeForm);
+
+document.getElementById('delete-employee__form')
+.addEventListener('submit', sendDeleteEmployeeForm);
 
 historyButton.addEventListener('click',getHistory);
 
