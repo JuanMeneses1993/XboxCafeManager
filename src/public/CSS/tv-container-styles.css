@@ -8,14 +8,14 @@
     justify-content: center;
     z-index: 2;
     transform: translateX(-19vw);
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow-nav);
     border-radius: 0 30px 0 0;
     border: var(--borders);
     font-family: monospace;
     color: var(--text-second-color);
     text-shadow: var(--text-shadow);
     font-weight: bolder;
-    background-color:rgba(11, 11, 27, 0.274);
+    background-color:var(--background-color);
 
 }
 .navigation-bar:hover{
@@ -218,11 +218,13 @@
     grid-template-columns: 1fr;
     border-left: 3px solid black;
     
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow-tv-container);
     border-radius: 10px;
     border: 1px solid rgba(32, 18, 109, 0.233);
     margin-bottom:10%;
-    background: linear-gradient(-80deg, transparent, rgba(128, 128, 206, 0.048));
+    background: var(--background-tv-container);
+    background-color:var(--background-color);
+
 }
 
 
