@@ -1,5 +1,7 @@
 import { Connection } from "promise-mysql";
 import { getConnection } from "../database/database";
+import { tvDbHelper } from "./tv.db.helper";
+import { tvHelper } from "./tv.helper";
 
 const isUserExist = async (userName)=>{
     //devuelve un error si el usuario ya esta registrado
@@ -79,10 +81,10 @@ const addMinutesToClient = async (userName, hours, minutes)=>{
     }
 };
 
-const substractMinutesToClient = async (userName, minutes, mode)=>{
+const substractMinutesToClient = async (userName, minutes, tvNumber)=>{
     try {
         //Sale si el usuario es anonimo o se activo por tiempo libre
-        if (userName === 'Anonymous' || mode === 'unlimited'){
+        if (userName === 'Anonymous'){
             return
         };
         
@@ -92,9 +94,19 @@ const substractMinutesToClient = async (userName, minutes, mode)=>{
         const connection = await getConnection();
         const leftMinutesUpdated = await connection.query(`SELECT leftMinutes FROM clientes WHERE user = ?`, userFormated)
             .then(DBResponse=>{
+                if (DBResponse[0].leftMinutes === "0"){
+                    return 'noTime'
+                }
                 return((Number(DBResponse[0].leftMinutes)) - (Number(minutes)));
             });
 
+        
+        if (leftMinutesUpdated === 'noTime'){
+            await historyDbHelper.createHistoryRow(tvNumber)
+            await tvDbHelper.resetTvDb(tvNumber);
+            tvHelper.deactivateTv(tvNumber);
+            return
+        }
         //actualizar los datos
         const result = await connection.query(`UPDATE clientes SET leftMinutes = ${leftMinutesUpdated} WHERE user = ?`,userFormated);
 

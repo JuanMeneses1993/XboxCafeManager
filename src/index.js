@@ -14,11 +14,11 @@ const main = async () => {
             Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 100);
             
         } catch (error) {
-            console.log(error)
-            break
-        }
+            console.log(error);
+            break;
+        };
 
-    }
+    };
 };
 
 

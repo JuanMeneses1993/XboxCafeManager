@@ -14,9 +14,16 @@ const activateTv = async (req, res)=>{
     try {
         //extraer datos
         let {activateTvNumber, activateTvHours, activateTvMinutes, activateTvUser, activateTvPass} = req.body;
+        if (!activateTvHours && !activateTvMinutes){
+            res.send('Ingrese Tiempo')
+            return
+        }
 
         //consultar si el televisor esta ocupado
         await tvDbHelper.isTvActive(activateTvNumber);  
+
+        //Consultar si el usuario ya esta activo
+        await tvDbHelper.isUserActive(activateTvUser);
         
         const getMinutes = async()=>{
             //caso de ser unlimited 
@@ -48,7 +55,7 @@ const activateTv = async (req, res)=>{
         await clientDbHelper.haveEnoughtTime(totalMinutes, user);
       
         //RESTAR TIEMPO AL USUARIO
-        await clientDbHelper.substractMinutesToClient(user, totalMinutes, mode);
+        //await clientDbHelper.substractMinutesToClient(user, totalMinutes, mode);
 
    
         //Escribir datos en la base de datos
@@ -59,7 +66,6 @@ const activateTv = async (req, res)=>{
         res.send(`Equipo ${(activateTvNumber)} activado`);
 
     } catch (error) {
-        console.log(error)
         res.send(String(error));
     };
 
@@ -73,7 +79,7 @@ const deactivateTv = async (req, res)=>{
         res.sendStatus(200);
         
     } catch (error) {
-        res.send(500)
+        res.send("Error al desactivar Tv")
     }
 };
 
